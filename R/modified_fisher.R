@@ -1,4 +1,6 @@
-## Testing dataset ------------------------------------------------------------
+# \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+# NON-CONSERVATIVE SIZE-α MODIFIED FISHER'S EXACT TEST ========================
+# /////////////////////////////////////////////////////////////////////////////
 
 u <- 5
 m <- 12
@@ -6,12 +8,8 @@ m <- 12
 v <- 7
 n <- 11
 
-#a <- max(u, 0.5)
-#b <- max(m-u, 0.5)
-#c <- max(v, 0.5)
-#d <- max(n-v, 0.5)
 
-t <- u+v
+modified_fisher_exact_test <- function(){}
 
 # RECREATE SAS PROGRAMME ======================================================
 
@@ -41,6 +39,10 @@ power_at_pi2 <- 0.75
 conf_int <- TRUE
 pvalue <- TRUE
 plot_size <- TRUE
+
+t <- u+v
+
+
 
 # Data inputs:
 
@@ -145,7 +147,7 @@ find_gamma <- function(c1, c2, .odds_ratio, .m, .n, .t, .alpha,
 
     if(s <= c1 | s >= c2){
 
-      if(.odds_ratio <= .precision){
+      if(.odds_ratio < .precision){
 
         if(s < c1){ p <- 1 }
         if(s >= c1){ p <- 0 }
@@ -207,16 +209,16 @@ find_gamma <- function(c1, c2, .odds_ratio, .m, .n, .t, .alpha,
 
 }
 
-#find_gamma(c1 = 0, c2 = 2, .odds_ratio = 2, .t = 2, .m = m, .n = n,
-#              .alpha = alpha, .precision = precision)
-
 ## Randomised FE test ---------------------------------------------------------
 
-randomised_fe_test <- function(.odds_ratio, .m, .n, .alpha, .precision,
+construct_test_frame <- function(.odds_ratio, .m, .n, .alpha, .precision,
                                .message = FALSE){
 
   # Set OR to arbitrarily small number if null is 0 (avoid errors)
-  if(.odds_ratio < .precision){ or <- .precision } else { or <- .odds_ratio }
+  if(.odds_ratio < .precision){
+    message(paste0("Odds ratio set to ", .precision, " for testing purposes"))
+    or <- .precision
+    } else { or <- .odds_ratio }
 
   # Test:
   #or <- 2
@@ -429,8 +431,33 @@ randomised_fe_test <- function(.odds_ratio, .m, .n, .alpha, .precision,
 
 } # End of function
 
-#randomised_fe_test(.odds_ratio = 2, .m = m, .n = n, .alpha = alpha,
-#                   .precision = precision, .message = message)
+## Define randomised conservative modified FET --------------------------------
+
+# This is a function of z = (u, t), and is basically an indicator
+# function whether to reject or not. Requires n, m, alpha, and df.
+
+random_fe_test <- function(z, .df, .gamma0, .odds_ratio, .m, .n,
+                             .alpha, .precision){
+
+  #df <- construct_test_frame(.odds_ratio, .m, .n, .alpha, .precision)
+
+  s <- z[[1]]
+  i <- z[[2]]
+
+  if(s > .df$c1[[i+1]] & s < .df$c2[[i+1]]){ opttest <- 0 }
+
+  if(s == .df$c1[[i+1]]){ opttest <- .df$gamma1[[i+1]] > .gamma0}
+  if(s == .df$c2[[i+1]]){ opttest <- .df$gamma2[[i+1]] > .gamma0}
+
+  if(s < .df$c1[[i+1]] | s > .df$c2[[i+1]]){ opttest <- 1 }
+
+  if(.df$c1[[i+1]] == .df$c2[[i+1]] & s == .df$c1[[i+1]]){
+    opttest <- (.df$gamma1[[i+1]]+.df$gamma2[[i+1]]) > .gamma0
+  }
+
+  return(opttest)
+
+}
 
 ## Define non-randomised non-conservative modified FET ------------------------
 
@@ -439,10 +466,10 @@ randomised_fe_test <- function(.odds_ratio, .m, .n, .alpha, .precision,
 
 # Requires n, m, alpha, df$c1,c2,gamma1,gamma2 and 'gamma0'
 
-modified_fe_test <- function(z, .df, .gamma0, .odds_ratio, .m, .n,
-                             .alpha, .precision){
+mod_fe_test <- function(z, .df, .gamma0, .odds_ratio, .m, .n,
+                        .alpha, .precision){
 
-  #df <- randomised_fe_test(.odds_ratio, .m, .n, .alpha, .precision)
+  #df <- construct_test_frame(.odds_ratio, .m, .n, .alpha, .precision)
 
   s <- z[[1]]
   i <- z[[2]]
@@ -480,7 +507,7 @@ local_size <- function(nuisance, .gamma0, .odds_ratio, .m, .n,
 
       x <- c(i, i+j)
 
-      locsize <- locsize + modified_fe_test(x, .df, .gamma0, .odds_ratio, .m, .n,
+      locsize <- locsize + mod_fe_test(x, .df, .gamma0, .odds_ratio, .m, .n,
                                             .alpha, .precision)*
         dbinom(x = i, prob = p0, size = .m)*
         dbinom(x = j, prob = p1, size = .n)
@@ -530,7 +557,7 @@ local_size_gradient <- function(nuisance, .gamma0, .odds_ratio, .m, .n,
       total <- term1*dbinom(x = v, prob = p1, size = .n) +
         term2*dbinom(x = u, prob = p0, size = .m)*dp1dp0
 
-      locsizegrad <- locsizegrad + modified_fe_test(x, .df, .gamma0, .odds_ratio,
+      locsizegrad <- locsizegrad + mod_fe_test(x, .df, .gamma0, .odds_ratio,
                                                     .m, .n, .alpha,
                                                     .precision)*total
 
@@ -589,6 +616,8 @@ mfet_size <- function(.c, .odds_ratio, .m, .n, .df, .alpha, .precision){
 
     size <- local_size(xopt, .gamma0 = gamma0, .m, .n, .df, .alpha, .precision)
 
+    # Test trust package here
+
   } else {
 
     res <- rep(0, maze-1)
@@ -627,7 +656,7 @@ mfet_size <- function(.c, .odds_ratio, .m, .n, .df, .alpha, .precision){
 
 optimise_gamma0 <- function(.odds_ratio, .m, .n, .alpha, .precision){
 
-  df <- randomised_fe_test(.odds_ratio, .m, .n, .alpha, .precision)
+  df <- construct_test_frame(.odds_ratio, .m, .n, .alpha, .precision)
   gamind <- c(df$gamma1, df$gamma2)
 
   # Sort gammas:
@@ -688,8 +717,9 @@ optimise_gamma0 <- function(.odds_ratio, .m, .n, .alpha, .precision){
 accept <- function(z, .odds_ratio, .m, .n, .df, .alpha, .precision){
 
   gamma0 <- optimise_gamma0(.odds_ratio, .m, .n, .alpha, .precision)
-  accept <- 1 - modified_fe_test(z, .df, gamma0, .odds_ratio, .m, .n,
-                                 .alpha, .precision)
+
+  accept <- 1 - mod_fe_test(z, .df, gamma0, .odds_ratio, .m, .n,
+                            .alpha, .precision)
 
   return(accept)
 
@@ -715,14 +745,14 @@ power_mfet <- function(p, .gamma0, .odds_ratio, .m, .n, .df, .alpha, .precision)
       if(superiority == TRUE){
 
         power <- power + (v/.n > u/.m)*
-          modified_fe_test(z, .df, .gamma0, .odds_ratio, .m, .n, .alpha, .precision)*
+          mod_fe_test(z, .df, .gamma0, .odds_ratio, .m, .n, .alpha, .precision)*
           dbinom(x = u, prob = p0, size = .m)*
           dbinom(x = v, prob = p1, size = .n)
 
       } else {
 
         power <- power +
-          modified_fe_test(z, .df, .gamma0, .odds_ratio, .m, .n, .alpha, .precision)*
+          mod_fe_test(z, .df, .gamma0, .odds_ratio, .m, .n, .alpha, .precision)*
           dbinom(x = u, prob = p0, size = .m)*
           dbinom(x = v, prob = p1, size = .n)
 
@@ -748,14 +778,14 @@ power_mfet <- function(p, .gamma0, .odds_ratio, .m, .n, .df, .alpha, .precision)
 # and:
 z <- c(u, t)
 
-df <- randomised_fe_test(.odds_ratio = odds_ratio, .m = m, .n = n, .alpha = alpha,
-                         .precision = precision)
+df <- construct_test_frame(.odds_ratio = odds_ratio, .m = m, .n = n,
+                           .alpha = alpha, .precision = precision)
 
 message <- FALSE
 
 if(power == TRUE){
 
-  or <- odds_ratio
+  or <- 1
 
   gamma0 <- optimise_gamma0(.odds_ratio = or, .m = m, .n = n, .alpha = alpha,
                             .precision = precision)
@@ -778,8 +808,9 @@ c <- max(v, 0.5)
 d <- max(n-v, 0.5)
 
 or0 <- (a*d)/(b*c)
+#calc_expected_value(.odds_ratio = 1, m, n, t, precision)
 
-z_alpha <- qnorm(alpha/2)
+z_alpha <- -qnorm(alpha/2)
 
 upper0 <- exp(log(or0) + z_alpha*sqrt(1/a+1/b+1/c+1/d))
 lower0 <- exp(log(or0) - z_alpha*sqrt(1/a+1/b+1/c+1/d))
@@ -797,7 +828,11 @@ if(conf_int){
     while(crit > precision){
 
       or <- (f1+f2)/2
-      answer <- accept(z, .odds_ratio = or, .m = m, .n = n, .df = df,
+
+      df2 <- construct_test_frame(.odds_ratio = or, .m = m, .n = n,
+                                  .alpha = alpha, .precision = precision)
+
+      answer <- accept(z, .odds_ratio = or, .m = m, .n = n, .df = df2,
                        .alpha = alpha, .precision = precision)
 
       if(answer == 1){ f1 <- or } else { f2 <- or }
@@ -827,7 +862,11 @@ if(conf_int){
     while(crit > precision){
 
       or <- (f1+f2)/2
-      answer <- accept(z, .odds_ratio = or, .m = m, .n = n, .df = df,
+
+      df2 <- construct_test_frame(.odds_ratio = or, .m = m, .n = n,
+                                  .alpha = alpha, .precision = precision)
+
+      answer <- accept(z, .odds_ratio = or, .m = m, .n = n, .df = df2,
                        .alpha = alpha, .precision = precision)
 
       if(answer == 1){ f2 <- or } else { f1 <- or }
@@ -856,8 +895,8 @@ if(plot_size == TRUE){
     "pi1" = seq(0, 1, by = 1/100)
   )
 
-  #df <- randomised_fe_test(.odds_ratio = or, .m = m, .n = n, .alpha = alpha,
-  #                         .precision = precision)
+  #df <- construct_test_frame(.odds_ratio = or, .m = m, .n = n, .alpha = alpha,
+  #                           .precision = precision)
 
   gam0 <- optimise_gamma0(.odds_ratio = odds_ratio, .m = m, .n = n,
                           .alpha = alpha, .precision = precision)
@@ -892,6 +931,7 @@ ggplot(plot_data, aes(x = pi1, y = size)) +
   #scale_y_continuous(limits = c(-4, 4*alpha*100)) +
   geom_hline(yintercept = alpha*100, linetype = 2, colour = "grey30",
              linewidth = 0.4) +
+  coord_cartesian(ylim = c(0, 1.05*alpha*100)) +
   scale_color_brewer(palette = "Dark2") +
   labs(
     title = "Size of Modified Fisher Exact Tests",
@@ -916,33 +956,34 @@ ggsave(last_plot(), width = 160, height = 120, units = "mm", dpi = "retina",
                          ".png"))
 
 
-p0 <- 0
-p1 <- 1
+pval_lower <- 0
+pval_upper <- 1
 a0 <- 0.5
-crit <- p1-p0
+crit <- pval_upper-pval_lower
 
 # p-value for H0 :
 
 while(abs(crit) > precision){
 
-  reject <- 1-accept(z, .odds_ratio = odds_ratio, .m = m, .n = n, .df = df,
-                     .alpha = alpha, .precision = precision)
+  df3 <- construct_test_frame(.odds_ratio = odds_ratio, .m = m, .n = n,
+                              .alpha = a0, .precision = precision)
+
+  reject <- 1-accept(z, .odds_ratio = odds_ratio, .m = m, .n = n,
+                     .df = df3, .alpha = a0, .precision = precision)
 
   if(reject == 1){
-    p1 <- a0
-    a0 <- (p0+p1)/2
+    pval_upper <- a0
+    a0 <- (pval_lower+pval_upper)/2
   } else {
-    p0 <- a0
-    a0 <- (p0+p1)/2
+    pval_lower <- a0
+    a0 <- (pval_lower+pval_upper)/2
   }
 
-  crit <- p1-p0
-
-  RESULT_pval <- a0
-  #label <- paste0("p-value for H0: OR = ", odds_ratio,
-  #                round(p_value, digits = nchar(1/precision)))
+  crit <- pval_lower-pval_lower
 
 }
+
+RESULT_pval <- a0
 
 ## Create output --------------------------------------------------------------
 
