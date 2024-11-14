@@ -1,4 +1,4 @@
-# Non-Conservative Size-α Modified Fisher's Exact Test for Count Data
+# Non-Conservative Size-α Modified Fisher's Exact Test
 
 ![Static Badge](https://img.shields.io/badge/status-work_in_progress-orange)
 
