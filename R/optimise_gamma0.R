@@ -6,6 +6,7 @@ optimise_gamma0 <- function(.odds_ratio, .m, .n, .alpha, .precision,
                             .method, .maze, .zoom_iter){
 
   df <- construct_test_frame(.odds_ratio, .m, .n, .alpha, .precision)
+
   gamind <- c(df$gamma1, df$gamma2)
 
   # Sort gammas:

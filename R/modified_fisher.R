@@ -7,7 +7,7 @@ modified_fisher_exact_test <- function(u, m, v, n, odds_ratio,
                                        precision = 1e-03,
                                        message = FALSE,
                                        maze = 10, # Number of points at each iteration to select nuisance parameter with max size from
-                                       method = "zoom", #c("zoom", "nlopt")
+                                       method = "zoom", #c("zoom", "trust")
                                        zoom_iter = 6, # Number of iterations used for the zoom optimisation method.
                                        superiority = FALSE,
                                        power = TRUE,
@@ -240,7 +240,7 @@ modified_fisher_exact_test <- function(u, m, v, n, odds_ratio,
     }
 
     plot_data$size <- as.numeric(plot_data$size)
-    plot_data$method <- "modified"
+    plot_data$method <- method
 
   }
 
@@ -298,7 +298,18 @@ modified_fisher_exact_test <- function(u, m, v, n, odds_ratio,
     support.data = df,
     local.size.data = if(local_size_data) plot_data,
     gamma0 = gam0,
-    power = if(power) power_mfet
+    power = if(power) power_mfet,
+    fn_args = list(
+      "alpha" = alpha,
+      "precision" = precision,
+      "maze" = maze,
+      "method" = method,
+      "zoom_iter" = zoom_iter,
+      "superiority" = superiority,
+      "power" = power,
+      "power_at_pi1" = power_at_pi1,
+      "power_at_pi2" = power_at_pi2
+    )
   )
 
   attr(RESULTS, "class") <- "htest"
