@@ -1,4 +1,15 @@
-## Calculate expected value ---------------------------------------------------
+#' Calculate expected OR value ---- helper function ---------------------------
+#'
+#' Calculate expected value of theta (OR) given m, n, t and precision.
+#'
+#' @param .odds_ratio The null hypothesis odds ratio being tested. No default.
+#' @param .m Integer input responses and sample sizes. Tests u/m versus v/n. No default.
+#' @param .n Integer input responses and sample sizes. Tests u/m versus v/n. No default.
+#' @param .t Integer input responses and sample sizes. t = u + v.
+#' @param .precision Defines the precision by which confidence limits, p-values, and size is determined. Defaults to 1E-03.
+#'
+#' @keywords calculate expected value odds ratio theta
+#' @importFrom BiasedUrn dFNCHypergeo
 
 calc_expected_value <- function(.odds_ratio, .m, .n, .t, .precision){
 

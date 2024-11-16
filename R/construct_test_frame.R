@@ -1,8 +1,18 @@
-# \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-# CONSTRUCT TESTING DATASET ===================================================
-# /////////////////////////////////////////////////////////////////////////////
-
-# Also find gamma1 and gamma2 randomisation values.
+#' Construct testing frame and randomisation values ---------------------------
+#'
+#' Construct data frame with possible values for u and attach the gamma1 and
+#' # gamma2 randomisation values (given the null odds ratio, precision, and
+#' significance level alpha) to this data frame.
+#'
+#' @param .odds_ratio The null hypothesis odds ratio being tested. No default.
+#' @param .m Integer input responses and sample sizes. Tests u/m versus v/n. No default.
+#' @param .n Integer input responses and sample sizes. Tests u/m versus v/n. No default.
+#' @param .alpha The nominal significance level α. Defaults to 0.05.
+#' @param .precision Defines the precision by which confidence limits, p-values, and size is determined. Defaults to 1E-03.
+#' @param .message A logical. Defaults to FALSE. Setting this to TRUE will print messages as the function is running; this can be useful for debugging.
+#'
+#' @keywords construct randomisation values testing gamma
+#' @importFrom BiasedUrn qFNCHypergeo
 
 construct_test_frame <- function(.odds_ratio, .m, .n, .alpha, .precision,
                                  .message = FALSE){

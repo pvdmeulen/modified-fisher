@@ -1,7 +1,19 @@
-## Find randomisation values so that size is alpha ----------------------------
-
-# Require that phi (fisher exact test) is of size alpha given some
-# given critical values:
+#' Find randomisation values gamma1 and gamma2 --------------------------------
+#'
+#' Find the gamma1 and gamma2 randomisation values (given the null odds ratio,
+#' precision, and critical values) so that the test size is alpha.
+#'
+#' @param c1 Critical value 1.
+#' @param c2 Critical value 2.
+#' @param .m Integer input responses and sample sizes. Tests u/m versus v/n. No default.
+#' @param .n Integer input responses and sample sizes. Tests u/m versus v/n. No default.
+#' @param .t Integer input responses and sample sizes. t = u + v.
+#' @param .odds_ratio The null hypothesis odds ratio being tested. No default.
+#' @param .alpha The nominal significance level α. Defaults to 0.05.
+#' @param .precision Defines the precision by which confidence limits, p-values, and size is determined. Defaults to 1E-03.
+#'
+#' @keywords construct randomisation values testing gamma
+#' @importFrom BiasedUrn dFNCHypergeo
 
 find_gamma <- function(c1, c2, .odds_ratio, .m, .n, .t, .alpha,
                        .precision){

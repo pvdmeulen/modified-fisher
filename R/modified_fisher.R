@@ -1,6 +1,37 @@
 # \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-# NON-CONSERVATIVE SIZE-α MODIFIED FISHER'S EXACT TEST ========================
+# MODIFIED FISHER EXACT TEST ==================================================
 # /////////////////////////////////////////////////////////////////////////////
+
+#' The non-conservative, non-randomised modified Fisher Exact Test.
+#'
+#' @param u Integer input responses and sample sizes. Tests u/m versus v/n. No default.
+#' @param m Integer input responses and sample sizes. Tests u/m versus v/n. No default.
+#' @param v Integer input responses and sample sizes. Tests u/m versus v/n. No default.
+#' @param n Integer input responses and sample sizes. Tests u/m versus v/n. No default.
+#' @param odds_ratio The null hypothesis odds ratio being tested. No default.
+#' @param alpha The nominal significance level alpha. Defaults to 0.05.
+#' @param precision Defines the precision by which confidence limits, p-values, and size is determined. Defaults to 1E-03.
+#' @param message A logical. Defaults to FALSE. Setting this to TRUE will print messages as the function is running; this can be useful for debugging.
+#' @param method Defines the numerical method used to find the optimum nuisance parameter (maximising actual size) of the test. The default is "zoom", with the second option being "trust" (this uses the trust() function from the trust region package).
+#' @param maze Number of points at each iteration to select the nuisance parameter with maximum size from.
+#' @param zoom_iter Number of iterations to zoom in with (in the "zoom" method).
+#' @param power A logical. Defaults to TRUE. Setting this to FALSE will skip the power calculation.
+#' @param superiority A logical. Defaults to FALSE. Setting this to TRUE will calculate the power for testing superiority.
+#' @param power_at_pi1 Power for pi1 (the null hypothesis). Defaults to 0.5.
+#' @param power_at_pi2 Power for pi2 (the alternative hypothesis). Defaults to 0.75.
+#' @param conf_int A logical. Defaults to TRUE. Setting this to FALSE will skip the (1-alpha, two-sided) confidence intervals calculations.
+#' @param pvalue A logical. Defaults to TRUE. Setting this to FALSE will skip the (two-sided, test-based) p-value calculations.
+#' @param local_size_data A logical. Defaults to FALSE. Setting this to TRUE will attach a 'local.size.data' data frame to the test results used in plotting the size of the test.
+#'
+#' @keywords non randomised randomized conservative fisher exact test modified
+#' @rdname modified_fisher_exact_test
+#' @export
+#'
+#' @return Returns an <htest> object
+#' @examples
+#' \dontrun{
+#' # Example here
+#' }
 
 modified_fisher_exact_test <- function(u, m, v, n, odds_ratio,
                                        alpha = 0.05,
@@ -16,7 +47,7 @@ modified_fisher_exact_test <- function(u, m, v, n, odds_ratio,
                                        conf_int = TRUE,
                                        pvalue = TRUE,
                                        local_size_data = TRUE
-                                       ){
+){
 
   # RECREATE SAS PROGRAMME ======================================================
 
@@ -24,9 +55,8 @@ modified_fisher_exact_test <- function(u, m, v, n, odds_ratio,
   # biasurn
   # nlopt
 
-  require(BiasedUrn)
-  require(nloptr)
-  require(trust) # investigate this package for nloptr option
+  #require(BiasedUrn)
+  #require(trust) # investigate this package for nloptr option
 
   t <- u+v
 
@@ -57,7 +87,7 @@ modified_fisher_exact_test <- function(u, m, v, n, odds_ratio,
 
   #DATANAME <- deparse(substitute(data))
   DATANAME <- paste0("u = ", u, ", v = ", v, ", m = ", m, ", n = ", n)
-  METHOD <- paste0("Non-Conservative Size-α Modified Fisher's Exact Test")
+  METHOD <- paste0("Non-Conservative Size-\u03b1 Modified Fisher's Exact Test")
 
   ## Input values -------------------------------------------------------------
 
@@ -132,7 +162,7 @@ modified_fisher_exact_test <- function(u, m, v, n, odds_ratio,
   RESULT_estimate <- or0
   #calc_expected_value(.odds_ratio = 1, m, n, t, precision)
 
-  z_alpha <- -qnorm(alpha/2)
+  z_alpha <- -stats::qnorm(alpha/2)
 
   upper0 <- exp(log(or0) + z_alpha*sqrt(1/a+1/b+1/c+1/d))
   lower0 <- exp(log(or0) - z_alpha*sqrt(1/a+1/b+1/c+1/d))

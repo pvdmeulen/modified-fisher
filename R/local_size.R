@@ -1,7 +1,18 @@
-# \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-# LOCAL SIZE AND SIZE GRADIENT OF TESTS =======================================
-# /////////////////////////////////////////////////////////////////////////////
-
+#' Find local size and size gradient of test ----------------------------------
+#'
+#' Find the local size of the MFET as a function of the null OR theta_0.
+#'
+#' @param nuisance Nuisance parameter.
+#' @param .gamma0 Some randomisation probability gamma0.
+#' @param .m Integer input responses and sample sizes. Tests u/m versus v/n. No default.
+#' @param .n Integer input responses and sample sizes. Tests u/m versus v/n. No default.
+#' @param .df Testing frame (data frame) generated as part as construct_test_frame().
+#' @param .odds_ratio The null hypothesis odds ratio being tested. No default.
+#' @param .alpha The nominal significance level α. Defaults to 0.05.
+#' @param .precision Defines the precision by which confidence limits, p-values, and size is determined. Defaults to 1E-03.
+#'
+#' @keywords find local size hypothesis test gradient
+#'
 # Expand in future to cover other tests too / any test fn that outputs (0, 1).
 
 ## Define the size of the modified FE test as a function of null OR -----------
@@ -24,8 +35,8 @@ local_size <- function(nuisance, .gamma0, .odds_ratio, .m, .n,
 
       locsize <- locsize + mod_fe_test(x, .df, .gamma0, .odds_ratio, .m, .n,
                                        .alpha, .precision)*
-        dbinom(x = i, prob = p0, size = .m)*
-        dbinom(x = j, prob = p1, size = .n)
+        stats::dbinom(x = i, prob = p0, size = .m)*
+        stats::dbinom(x = j, prob = p1, size = .n)
 
     }
 
@@ -36,6 +47,19 @@ local_size <- function(nuisance, .gamma0, .odds_ratio, .m, .n,
 }
 
 ## Create local size gradient -------------------------------------------------
+#'
+#' @param nuisance Nuisance parameter.
+#' @param .gamma0 Some randomisation probability gamma0.
+#' @param .m Integer input responses and sample sizes. Tests u/m versus v/n. No default.
+#' @param .n Integer input responses and sample sizes. Tests u/m versus v/n. No default.
+#' @param .df Testing frame (data frame) generated as part as construct_test_frame().
+#' @param .odds_ratio The null hypothesis odds ratio being tested. No default.
+#' @param .alpha The nominal significance level α. Defaults to 0.05.
+#' @param .precision Defines the precision by which confidence limits, p-values, and size is determined. Defaults to 1E-03.
+#'
+#' @keywords find local size hypothesis test gradient
+#'
+# Expand in future to cover other tests too / any test fn that outputs (0, 1).
 
 local_size_gradient <- function(nuisance, .gamma0, .odds_ratio, .m, .n,
                                 .df, .alpha, .precision){
@@ -57,7 +81,7 @@ local_size_gradient <- function(nuisance, .gamma0, .odds_ratio, .m, .n,
 
       if(i > 0 & i < .m){
         # x = r of successes, prob, size = number of trials
-        term1 <- dbinom(x = i-1, prob = p0, size = .m-2)*.m*(.m-1)/
+        term1 <- stats::dbinom(x = i-1, prob = p0, size = .m-2)*.m*(.m-1)/
           (i*(.m-i))*(i-.m*p0)
 
       }
@@ -66,12 +90,12 @@ local_size_gradient <- function(nuisance, .gamma0, .odds_ratio, .m, .n,
       if(j == .n){ term2 <- .n*p1^(.n-1) }
 
       if(j > 0 & j < .n){
-        term2 <- dbinom(x = j-1, prob = p1, size = .n-2)*.n*(.n-1)/
+        term2 <- stats::dbinom(x = j-1, prob = p1, size = .n-2)*.n*(.n-1)/
           (j*(.n-j))*(j-.n*p1)
       }
 
-      total <- term1*dbinom(x = j, prob = p1, size = .n) +
-        term2*dbinom(x = i, prob = p0, size = .m)*dp1dp0
+      total <- term1*stats::dbinom(x = j, prob = p1, size = .n) +
+        term2*stats::dbinom(x = i, prob = p0, size = .m)*dp1dp0
 
       locsizegrad <- locsizegrad + mod_fe_test(x, .df, .gamma0, .odds_ratio,
                                                .m, .n, .alpha,
