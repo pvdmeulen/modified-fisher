@@ -64,7 +64,7 @@ The data is now stored in the `test_result$local.size.data` object:
 
 Plotting this leads to a similar plot as Figure 1(a):
 
-<img src="man/figures/README-plot_data-1.png" width="100%" />
+<img src="man/figures/README-plot_data-1.svg" width="100%" />
 
 ## The Modified Fisher Exact Test
 
