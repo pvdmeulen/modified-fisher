@@ -62,8 +62,18 @@ The data is now stored in the `test_result$local.size.data` object:
 | 0.04 | 0.1038314 | zoom   |
 | 0.05 | 0.2116501 | zoom   |
 
+Plotting this leads to a similar plot as Figure 1(a):
+
+<img src="man/figures/README-plot_data-1.png" width="100%" />
+
 ## The Modified Fisher Exact Test
 
 ### [Read the article here](https://www.researchgate.net/publication/351111885_Consistent_Confidence_Limits_P_Values_and_Power_of_the_Non-Conservative_Size_-a_Modified_Fisher_Exact_Test)
 
-- Brief rationale and explanation of theory
+- Add brief rationale and explanation of theory
+
+## Next steps
+
+- Implement checks and unit tests
+- Document functions in a consistent way with article / SAS macro
+- Add randomised Fisher Exact Test option
