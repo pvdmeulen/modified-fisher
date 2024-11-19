@@ -46,7 +46,7 @@ modified_fisher_exact_test <- function(u, m, v, n, odds_ratio,
                                        power_at_pi2 = 0.75,
                                        conf_int = TRUE,
                                        pvalue = TRUE,
-                                       local_size_data = TRUE
+                                       local_size_data = FALSE
 ){
 
   # RECREATE SAS PROGRAMME ======================================================
@@ -102,18 +102,18 @@ modified_fisher_exact_test <- function(u, m, v, n, odds_ratio,
   # HELPER FUNCTIONS ------------------------------------------------------------
 
   # Generic:
-  source("R/calc_exp_value.R")
-  source("R/find_gamma12.R")
-  source("R/construct_test_frame.R")
-  #source("R/random_fe_test.R")
-
-  # Modified FE test:
-  source("R/mod_fe_test.R")
-  source("R/local_size.R")  # expand to also calc local size for other tests
-  source("R/mod_fe_size.R")
-  source("R/optimise_gamma0.R")
-  source("R/accept.R")      # expand to also output accept/reject for other tests
-  source("R/local_power.R") # expand to also calc local power for other tests
+  # source("R/calc_exp_value.R")
+  # source("R/find_gamma12.R")
+  # source("R/construct_test_frame.R")
+  # #source("R/random_fe_test.R")
+  #
+  # # Modified FE test:
+  # source("R/mod_fe_test.R")
+  # source("R/local_size.R")  # expand to also calc local size for other tests
+  # source("R/mod_fe_size.R")
+  # source("R/optimise_gamma0.R")
+  # source("R/accept.R")      # expand to also output accept/reject for other tests
+  # source("R/local_power.R") # expand to also calc local power for other tests
 
 
   # START MAIN FUNCTION =========================================================
@@ -239,29 +239,24 @@ modified_fisher_exact_test <- function(u, m, v, n, odds_ratio,
 
   } # End of conf_int == TRUE
 
+  # Find optimal gamma0 for size data and for output later:
 
+  opt_gamma0 <- optimise_gamma0(.odds_ratio = odds_ratio, .m = m, .n = n,
+                                .alpha = alpha, .precision = precision,
+                                .method = method, .maze = maze,
+                                .zoom_iter = zoom_iter)
 
   if(local_size_data){
-
-    # PICK UP HERE
 
     plot_data <- data.frame(
       "pi1" = seq(0, 1, by = 1/100)
     )
 
-    #df <- construct_test_frame(.odds_ratio = or, .m = m, .n = n, .alpha = alpha,
-    #                           .precision = precision)
-
-    gam0 <- optimise_gamma0(.odds_ratio = odds_ratio, .m = m, .n = n,
-                            .alpha = alpha, .precision = precision,
-                            .method = method, .maze = maze,
-                            .zoom_iter = zoom_iter)
-
     for(row in 1:101){
 
       point <- plot_data$pi1[[row]]
 
-      plot_data$size[[row]] <- local_size(point, .gamma0 = gam0,
+      plot_data$size[[row]] <- local_size(point, .gamma0 = opt_gamma0,
                                           .odds_ratio = odds_ratio,
                                           .m = m, .n = n, .df = df,
                                           .alpha = alpha,
@@ -327,7 +322,7 @@ modified_fisher_exact_test <- function(u, m, v, n, odds_ratio,
     data.name = DATANAME,
     support.data = df,
     local.size.data = if(local_size_data) plot_data,
-    gamma0 = gam0,
+    gamma0 = opt_gamma0,
     power = if(power) power_mfet,
     fn_args = list(
       "alpha" = alpha,

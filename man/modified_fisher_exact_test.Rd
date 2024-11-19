@@ -22,7 +22,7 @@ modified_fisher_exact_test(
   power_at_pi2 = 0.75,
   conf_int = TRUE,
   pvalue = TRUE,
-  local_size_data = TRUE
+  local_size_data = FALSE
 )
 }
 \arguments{

@@ -40,7 +40,7 @@ accept(
 }
 \description{
 Determine if H : theta = theta0 is accepted based on MFET. Used within
-modified fisher exaxt test function and not exported.
+modified fisher exact test function and not exported.
 }
 \keyword{accept}
 \keyword{exact}

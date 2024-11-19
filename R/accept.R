@@ -1,7 +1,7 @@
 #' Accept ---- helper function ------------------------------------------------
 #'
 #' Determine if H : theta = theta0 is accepted based on MFET. Used within
-#' modified fisher exaxt test function and not exported.
+#' modified fisher exact test function and not exported.
 #'
 #' @param z Vector containing (u, t).
 #' @param .odds_ratio The null hypothesis odds ratio being tested. No default.

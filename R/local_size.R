@@ -1,5 +1,5 @@
-#' Find local size and size gradient of test ----------------------------------
-#'
+#Find local size and size gradient of test ----------------------------------
+
 #' Find the local size of the MFET as a function of the null OR theta_0.
 #'
 #' @param nuisance Nuisance parameter.
@@ -47,6 +47,8 @@ local_size <- function(nuisance, .gamma0, .odds_ratio, .m, .n,
 }
 
 ## Create local size gradient -------------------------------------------------
+
+#' Find the local size gradient of the MFET as a function of the null OR theta_0.
 #'
 #' @param nuisance Nuisance parameter.
 #' @param .gamma0 Some randomisation probability gamma0.
