@@ -60,7 +60,7 @@ Plotting this leads to a similar plot as Figure 1(a):
 library(ggplot2)
 
 plot <- ggplot(data = test_result$local.size.data, aes(x = pi1, y = size)) +
-    geom_line(colour = "#75260E", linewidth = 1) +
+    geom_line(colour = "#DB5461", linewidth = 1) +
     #scale_y_continuous(limits = c(-4, 4*alpha*100)) +
     geom_hline(yintercept = 0.05*100, linetype = 2, colour = "grey30",
                linewidth = 0.4) +
@@ -75,14 +75,17 @@ plot <- ggplot(data = test_result$local.size.data, aes(x = pi1, y = size)) +
     ) +
     theme_bw() +
     theme(
-      text = element_text(size = 12),
+      text = element_text(size = 12, colour = "grey60"),
       plot.title = element_text(face = "bold"),
       plot.subtitle = element_text(family = "STIX Two Text", face = "italic"),
       axis.title.x = element_text(family = "STIX Two Text", face = "italic"),
       legend.position = "bottom",
       legend.title = element_blank(),
       legend.text = element_text(size = 12),
-      plot.background = element_rect(fill = NA)
+      plot.background = element_rect(fill = NA),
+      panel.background = element_rect(fill = NA),
+      panel.grid = element_line(colour = "grey60"),
+      axis.line = element_line(colour = "grey60")
     )
 
 ggsave(plot, filename = "man/figures/README-plot_data-1.svg", width = 160,
