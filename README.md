@@ -64,9 +64,6 @@ The data is now stored in the `test_result$local.size.data` object:
 
 Plotting this leads to a similar plot as Figure 1(a):
 
-    #> Inverted geom defaults of fill and color/colour.
-    #> To change them back, use invert_geom_defaults().
-
 <picture>
 <source media="(prefers-color-scheme: dark)" srcset="man/figures/README-dark_plot_data-1.svg">
 <source media="(prefers-color-scheme: light)" srcset="man/figures/README-light_plot_data-1.svg">
