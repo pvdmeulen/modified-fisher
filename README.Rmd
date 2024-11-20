@@ -58,6 +58,7 @@ Plotting this leads to a similar plot as Figure 1(a):
 
 ```{r plot_data, echo = FALSE, eval = TRUE}
 library(ggplot2)
+library(ggdark)
 
 plot <- ggplot(data = test_result$local.size.data, aes(x = pi1, y = size)) +
     geom_line(colour = "#DB5461", linewidth = 1) +
@@ -73,9 +74,8 @@ plot <- ggplot(data = test_result$local.size.data, aes(x = pi1, y = size)) +
       y = "Size (%)",
       x = bquote(pi[.("1")])
     ) +
-    theme_bw() +
     theme(
-      text = element_text(size = 12, colour = "grey60"),
+      text = element_text(size = 12),
       plot.title = element_text(face = "bold"),
       plot.subtitle = element_text(family = "STIX Two Text", face = "italic"),
       axis.title.x = element_text(family = "STIX Two Text", face = "italic"),
@@ -83,16 +83,28 @@ plot <- ggplot(data = test_result$local.size.data, aes(x = pi1, y = size)) +
       legend.title = element_blank(),
       legend.text = element_text(size = 12),
       plot.background = element_rect(fill = NA),
-      panel.background = element_rect(fill = NA),
-      panel.grid = element_line(colour = "grey60"),
-      axis.line = element_line(colour = "grey60")
+      panel.background = element_rect(fill = NA)
     )
 
-ggsave(plot, filename = "man/figures/README-plot_data-1.svg", width = 160,
-       height = 120,  units = "mm", bg = "transparent", dpi = "retina")
+light_plot <- plot + theme_bw()
+dark_plot <- plot + ggdark::dark_theme_bw()
 
-knitr::include_graphics("man/figures/README-plot_data-1.svg")
+ggsave(light_plot, filename = "man/figures/README-light_plot_data-1.svg",
+       width = 160, height = 120,  units = "mm", bg = "transparent",
+       dpi = "retina")
+
+ggsave(dark_plot, filename = "man/figures/README-dark_plot_data-1.svg",
+       width = 160, height = 120,  units = "mm", bg = "transparent",
+       dpi = "retina")
+
+#knitr::include_graphics("man/figures/README-plot_data-1.svg")
 ```
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="man/figures/README-dark_plot_data-1.svg">
+  <source media="(prefers-color-scheme: light)" srcset="man/figures/README-light_plot_data-1.svg">
+  <img alt="Shows a graph with test size on the y-axis and nuisance parameter pi_1 between zero and one on the x-axis, with a line showing the relationship between the two. The line is shaped like two humps, with the maximum being rouhgly 4%.">
+</picture>
 
 ## The Modified Fisher Exact Test
 

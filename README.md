@@ -64,7 +64,14 @@ The data is now stored in the `test_result$local.size.data` object:
 
 Plotting this leads to a similar plot as Figure 1(a):
 
-<img src="man/figures/README-plot_data-1.svg" width="100%" />
+    #> Inverted geom defaults of fill and color/colour.
+    #> To change them back, use invert_geom_defaults().
+
+<picture>
+<source media="(prefers-color-scheme: dark)" srcset="man/figures/README-dark_plot_data-1.svg">
+<source media="(prefers-color-scheme: light)" srcset="man/figures/README-light_plot_data-1.svg">
+<img alt="Shows a graph with test size on the y-axis and nuisance parameter pi_1 between zero and one on the x-axis, with a line showing the relationship between the two. The line is shaped like two humps, with the maximum being rouhgly 4%.">
+</picture>
 
 ## The Modified Fisher Exact Test
 
