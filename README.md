@@ -7,8 +7,6 @@
 
 [![lifecycle](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
 [![R-CMD-check](https://github.com/pvdmeulen/modifiedfisher/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/pvdmeulen/modifiedfisher/actions/workflows/R-CMD-check.yaml)
-[![Codecov test
-coverage](https://codecov.io/gh/pvdmeulen/modifiedfisher/graph/badge.svg)](https://app.codecov.io/gh/pvdmeulen/modifiedfisher)
 <!-- badges: end -->
 
 ## Installation
@@ -53,20 +51,17 @@ test_result <- modified_fisher_exact_test(u = 5, m = 12, v = 7, n = 11, odds_rat
     alpha = 0.05, local_size_data = TRUE)
 ```
 
-The data is now stored in the `test_result$local.size.data` object:
+The data is now stored in the `test_result$local.size.data` object, with
+the first five rows given by:
 
-``` r
-head(test_result$local.size.data)
-#> # A tibble: 6 × 3
-#>     pi1     size method
-#>   <dbl>    <dbl> <chr> 
-#> 1  0    0        zoom  
-#> 2  0.01 0.000692 zoom  
-#> 3  0.02 0.00928  zoom  
-#> 4  0.03 0.0393   zoom  
-#> 5  0.04 0.104    zoom  
-#> 6  0.05 0.212    zoom
-```
+|  pi1 |      size | method |
+|-----:|----------:|:-------|
+| 0.00 | 0.0000000 | zoom   |
+| 0.01 | 0.0006922 | zoom   |
+| 0.02 | 0.0092791 | zoom   |
+| 0.03 | 0.0393075 | zoom   |
+| 0.04 | 0.1038314 | zoom   |
+| 0.05 | 0.2116501 | zoom   |
 
 Plotting this leads to a similar plot as Figure 1(a):
 
