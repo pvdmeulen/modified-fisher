@@ -16,13 +16,13 @@ modified_fisher_exact_test(
   maze = 10,
   method = "zoom",
   zoom_iter = 6,
-  superiority = FALSE,
-  power = TRUE,
-  power_at_pi1 = 0.5,
-  power_at_pi2 = 0.75,
   conf_int = TRUE,
   pvalue = TRUE,
-  local_size_data = FALSE
+  local_size_data = FALSE,
+  power = TRUE,
+  superiority = FALSE,
+  power_at_pi1 = 0.5,
+  power_at_pi2 = 0.75
 )
 }
 \arguments{
@@ -48,19 +48,19 @@ modified_fisher_exact_test(
 
 \item{zoom_iter}{Number of iterations to zoom in with (in the "zoom" method).}
 
-\item{superiority}{A logical. Defaults to FALSE. Setting this to TRUE will calculate the power for testing superiority.}
-
-\item{power}{A logical. Defaults to TRUE. Setting this to FALSE will skip the power calculation.}
-
-\item{power_at_pi1}{Power for pi1 (the null hypothesis). Defaults to 0.5.}
-
-\item{power_at_pi2}{Power for pi2 (the alternative hypothesis). Defaults to 0.75.}
-
 \item{conf_int}{A logical. Defaults to TRUE. Setting this to FALSE will skip the (1-alpha, two-sided) confidence intervals calculations.}
 
 \item{pvalue}{A logical. Defaults to TRUE. Setting this to FALSE will skip the (two-sided, test-based) p-value calculations.}
 
 \item{local_size_data}{A logical. Defaults to FALSE. Setting this to TRUE will attach a 'local.size.data' data frame to the test results used in plotting the size of the test.}
+
+\item{power}{A logical. Defaults to TRUE. Setting this to FALSE will skip the power calculation.}
+
+\item{superiority}{A logical. Defaults to FALSE. Setting this to TRUE will calculate the power for testing superiority.}
+
+\item{power_at_pi1}{Power for pi1 (the null hypothesis). Defaults to 0.5.}
+
+\item{power_at_pi2}{Power for pi2 (the alternative hypothesis). Defaults to 0.75.}
 }
 \value{
 Returns an \if{html}{\out{<htest>}} object

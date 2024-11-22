@@ -40,13 +40,13 @@ modified_fisher_exact_test <- function(u, m, v, n, odds_ratio,
                                        maze = 10, # Number of points at each iteration to select nuisance parameter with max size from
                                        method = "zoom", #c("zoom", "trust")
                                        zoom_iter = 6, # Number of iterations used for the zoom optimisation method.
-                                       superiority = FALSE,
-                                       power = TRUE,
-                                       power_at_pi1 = 0.5,
-                                       power_at_pi2 = 0.75,
                                        conf_int = TRUE,
                                        pvalue = TRUE,
-                                       local_size_data = FALSE
+                                       local_size_data = FALSE,
+                                       power = TRUE,
+                                       superiority = FALSE,
+                                       power_at_pi1 = 0.5,
+                                       power_at_pi2 = 0.75
 ){
 
   # RECREATE SAS PROGRAMME ======================================================
