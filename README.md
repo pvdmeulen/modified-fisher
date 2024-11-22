@@ -7,6 +7,8 @@
 
 [![lifecycle](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
 [![R-CMD-check](https://github.com/pvdmeulen/modifiedfisher/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/pvdmeulen/modifiedfisher/actions/workflows/R-CMD-check.yaml)
+[![Codecov test
+coverage](https://codecov.io/gh/pvdmeulen/modifiedfisher/graph/badge.svg)](https://app.codecov.io/gh/pvdmeulen/modifiedfisher)
 <!-- badges: end -->
 
 ## Installation
