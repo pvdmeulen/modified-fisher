@@ -53,14 +53,18 @@ test_result <- modified_fisher_exact_test(u = 5, m = 12, v = 7, n = 11, odds_rat
 
 The data is now stored in the `test_result$local.size.data` object:
 
-|  pi1 |      size | method |
-|-----:|----------:|:-------|
-| 0.00 | 0.0000000 | zoom   |
-| 0.01 | 0.0006922 | zoom   |
-| 0.02 | 0.0092791 | zoom   |
-| 0.03 | 0.0393075 | zoom   |
-| 0.04 | 0.1038314 | zoom   |
-| 0.05 | 0.2116501 | zoom   |
+``` r
+head(test_result$local.size.data)
+#> # A tibble: 6 × 3
+#>     pi1     size method
+#>   <dbl>    <dbl> <chr> 
+#> 1  0    0        zoom  
+#> 2  0.01 0.000692 zoom  
+#> 3  0.02 0.00928  zoom  
+#> 4  0.03 0.0393   zoom  
+#> 5  0.04 0.104    zoom  
+#> 6  0.05 0.212    zoom
+```
 
 Plotting this leads to a similar plot as Figure 1(a):
 

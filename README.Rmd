@@ -50,8 +50,8 @@ test_result <- modified_fisher_exact_test(u = 5, m = 12, v = 7, n = 11, odds_rat
 
 The data is now stored in the `test_result$local.size.data` object:
 
-```{r print_data, echo = FALSE, eval = TRUE}
-knitr::kable(head(test_result$local.size.data))
+```{r print_data, echo = TRUE, eval = TRUE}
+head(test_result$local.size.data)
 ```
 
 Plotting this leads to a similar plot as Figure 1(a):
